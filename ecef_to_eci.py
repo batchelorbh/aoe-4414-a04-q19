@@ -71,12 +71,10 @@ else:
 #Main body of script
 
 #Calculate fractional Julian date
-jd1 = day - 32075
-jd2 = 1461 * (year + 4800 + (month - 14) // 12) // 4
-jd3 = 367 * (month - 2 - (month - 14) // 12 * 12) // 12
-jd4 = -3 * ((year + 4900 + (month - 14) // 12) / 100) // 4
-
-jd = jd1 + jd2 + jd3 + jd4
+jd = day - 32075.0 \
+     + int(1461.0 * (year + 4800.0 + int((month - 14.0) / 12.0)) / 4.0) \
+     + int(367.0 * (month - 2.0 - int((month - 14.0) / 12.0) * 12.0) /12.0) \
+     - int(3.0 * (int((year + 4900.0 + int((month - 14.0) / 12.0)) / 100.0)) / 4.0)
 
 jd_mid = jd - 0.5
 d_frac = (second + 60 * (minute + 60 * hour)) / 86400
@@ -88,7 +86,7 @@ TUT1 = (jd_frac - 2451545.0) / 36525
 GMST = 67310.54841 + (876600 * 60 * 60 + 8640184.812866) * TUT1 \
        + 0.093104 * TUT1**2 + -6.2e-6 * TUT1**3
 
-GMST_rad = fmod(fmod(GMST, 86400) * W, 2 * pi)
+GMST_rad = fmod(fmod(GMST, 86400) * W + 2 * pi, 2 * pi)
 
 #Calculate ECI components
 eci_x_km = ecef_x_km * cos(-GMST_rad) + ecef_y_km * sin(-GMST_rad)
